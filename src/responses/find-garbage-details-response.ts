@@ -1,9 +1,9 @@
-import {GarbageItemInterface} from "./garbage-item-interface";
+import { GarbageItemInterface } from './garbage-item-interface';
 
 export default class FindGarbageDetailsResponse {
-    readonly items: Array<GarbageItemInterface>
+  readonly items: GarbageItemInterface[];
 
-    constructor(items: Array<GarbageItemInterface>) {
-        this.items = items;
-    }
+  constructor(items: GarbageItemInterface[]) {
+    this.items = items;
+  }
 }

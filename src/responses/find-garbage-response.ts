@@ -1,7 +1,7 @@
 export default class FindGarbageResponse {
-    readonly count: number
+  readonly count: number;
 
-    constructor(count: number) {
-        this.count = count;
-    }
+  constructor(count: number) {
+    this.count = count;
+  }
 }

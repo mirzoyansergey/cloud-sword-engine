@@ -1,7 +1,7 @@
-import {ResourceType} from "../domain/resource-type";
+import { ResourceType } from '../domain/resource-type';
 
 export interface GarbageItemInterface {
-    getName(): string
-    getType(): ResourceType
-    getPrice(): number
+  getName(): string;
+  getType(): ResourceType;
+  getPrice(): number;
 }

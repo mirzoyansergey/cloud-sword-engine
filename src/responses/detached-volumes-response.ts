@@ -1,12 +1,12 @@
-import Ebs from "../domain/types/ebs";
+import Ebs from '../domain/types/ebs';
 
 export default class DetachedVolumesResponse {
-    readonly items: Array<Ebs>
-    readonly count: number
+  readonly items: Ebs[];
+  readonly count: number;
 
-    constructor(items: Array<Ebs>) {
-        this.items = items;
+  constructor(items: Ebs[]) {
+    this.items = items;
 
-        this.count = items.length;
-    }
+    this.count = items.length;
+  }
 }

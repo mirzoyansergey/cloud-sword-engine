@@ -1,34 +1,30 @@
-import {GarbageItemInterface} from "./garbage-item-interface";
-import Ebs from "../domain/types/ebs";
-import {ResourceType} from "../domain/resource-type";
+import { GarbageItemInterface } from './garbage-item-interface';
+import Ebs from '../domain/types/ebs';
+import { ResourceType } from '../domain/resource-type';
 
 export default class EbsGarbageItem implements GarbageItemInterface {
-    readonly name: string;
-    readonly type: ResourceType = ResourceType.EBS;
-    readonly size: number;
+  readonly name: string;
+  readonly type: ResourceType = ResourceType.EBS;
+  readonly size: number;
 
+  private constructor(name: string, size: number) {
+    this.name = name;
+    this.size = size;
+  }
 
-    private constructor(name: string, size: number) {
-        this.name = name;
-        this.size = size;
-    }
+  public static fromEbs(ebs: Ebs): EbsGarbageItem {
+    return new EbsGarbageItem(ebs.id, ebs.size);
+  }
 
-    public static fromEbs(ebs: Ebs): EbsGarbageItem {
-        return new EbsGarbageItem(
-            ebs.id,
-            ebs.size
-        )
-    }
+  getName(): string {
+    return this.name;
+  }
 
-    getName(): string {
-        return this.name;
-    }
+  getType(): ResourceType {
+    return this.type;
+  }
 
-    getType(): ResourceType {
-        return this.type
-    }
-
-    getPrice(): number {
-        return 4.104 * this.size;
-    }
+  getPrice(): number {
+    return 4.104 * this.size;
+  }
 }
