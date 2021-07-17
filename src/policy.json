@@ -1,0 +1,26 @@
+{
+  "ebs-collect-unattached": {
+    "policies": [
+      {
+        "name": "ebs-collect-unattached",
+        "resource": "ebs",
+        "filters": [
+          {
+            "Attachments": []
+          }
+        ]
+      }
+    ]
+  },
+  "delete-unattached-volumes": {
+    "policies": [
+      {
+        "name": "delete-unattached-volumes",
+        "resource": "ebs",
+        "actions": [
+            "delete"
+        ]
+      }
+    ]
+  }
+}
