@@ -42,12 +42,12 @@ export class ShellAdapter implements AdapterInterface {
     const responseJson = this.executeCustodianCommand(config, policy, policyName);
 
     // remove temp files and folders
-    this.removeTempFoldersAndFiles(policyName);
+    ShellAdapter.removeTempFoldersAndFiles(policyName);
 
     return this.generateDetachedVolumesResponse(responseJson);
   }
 
-  deleteDetachedVolumes(config: Configuration, volumes: string[]) {
+  deleteDetachedVolumes(config: Configuration, volumes: string[] = []): DetachedVolumesResponse {
     const policyName = 'delete-unattached-volumes';
     const policy: any = Object.assign({}, policies[policyName]);
     if (volumes.length) {
@@ -73,6 +73,7 @@ export class ShellAdapter implements AdapterInterface {
     try {
       execSync(
         `AWS_DEFAULT_REGION=${config.region} AWS_ACCESS_KEY_ID=${config.accessKeyId} AWS_SECRET_ACCESS_KEY=${config.secretAccessKey} ${this.custodian} run --output-dir=.  temp.yaml`,
+        {stdio : 'pipe'}
       );
     } catch (e) {
       throw new Error(e.message);
@@ -85,12 +86,12 @@ export class ShellAdapter implements AdapterInterface {
     const data = JSON.parse(fs.readFileSync(resourcesPath, 'utf8'));
 
     // remove temp files and folders
-    this.removeTempFoldersAndFiles(policyName);
+    ShellAdapter.removeTempFoldersAndFiles(policyName);
 
     return data;
   }
 
-  private removeTempFoldersAndFiles(policyName: string) {
+  private static removeTempFoldersAndFiles(policyName: string): void {
     if (!fs.existsSync(`./${policyName}`)) {
       execSync(`rm -r ./${policyName}`);
     }
