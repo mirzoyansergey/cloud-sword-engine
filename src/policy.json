@@ -7,6 +7,9 @@
         "filters": [
           {
             "Attachments": []
+          },
+          {
+            "State": "available"
           }
         ]
       }
@@ -17,6 +20,14 @@
       {
         "name": "delete-unattached-volumes",
         "resource": "ebs",
+        "filters": [
+          {
+            "Attachments": []
+          },
+          {
+            "State": "available"
+          }
+        ],
         "actions": [
             "delete"
         ]

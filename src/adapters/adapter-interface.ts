@@ -10,5 +10,5 @@ export interface AdapterInterface {
 
   findDetachedVolumes(config: Configuration): DetachedVolumesResponse;
 
-  deleteDetachedVolumes(config: Configuration, volumes: string[]): DetachedVolumesResponse;
+  deleteDetachedVolumes(config: Configuration, volumes: string[]): any;
 }

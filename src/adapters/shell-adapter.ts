@@ -6,7 +6,7 @@ import { GarbageItemInterface } from '../responses/garbage-item-interface';
 import Ebs from '../domain/types/ebs';
 import EbsGarbageItem from '../responses/ebs-garbage-item';
 import DetachedVolumesResponse from '../responses/detached-volumes-response';
-import { exec } from 'child_process';
+import { execSync } from 'child_process';
 import yaml from 'js-yaml';
 import * as fs from 'fs';
 import * as policies from '../policy.json';
@@ -44,48 +44,62 @@ export class ShellAdapter implements AdapterInterface {
     // remove temp files and folders
     this.removeTempFoldersAndFiles(policyName);
 
-    return new DetachedVolumesResponse(
-      responseJson.map(
-        (ebsResponseItemJson: { VolumeId: string; Size: number; AvailabilityZone: string; CreateTime: string }) => {
-          return new Ebs(
-            ebsResponseItemJson.VolumeId,
-            ebsResponseItemJson.Size,
-            ebsResponseItemJson.AvailabilityZone,
-            ebsResponseItemJson.CreateTime,
-          );
-        },
-      ),
-    );
+    return this.generateDetachedVolumesResponse(responseJson);
   }
 
-  deleteDetachedVolumes(config: Configuration, volumes: string[]): DetachedVolumesResponse {
+  deleteDetachedVolumes(config: Configuration, volumes: string[]) {
     const policyName = 'delete-unattached-volumes';
     const policy: any = Object.assign({}, policies[policyName]);
     if (volumes.length) {
       policy.policies[0].filters = [
         {
-          VolumeId: volumes[0],
-        },
-      ];
-    } else {
-      policy.policies[0].filters = [
-        {
-          Attachments: [],
-        },
-        {
-          State: 'available',
+          type: "value",
+          key: "VolumeId",
+          op: "in",
+          value: volumes,
         },
       ];
     }
+    fs.writeFileSync('./temp.yaml', yaml.dump(policy), 'utf8');
 
     // execute custodian command
     const responseJson = this.executeCustodianCommand(config, policy, policyName);
 
+    return this.generateDetachedVolumesResponse(responseJson);
+  }
+
+  executeCustodianCommand(config: Configuration, policy: any, policyName: string) {
+    fs.writeFileSync('./temp.yaml', yaml.dump(policy), 'utf8');
+    try {
+      execSync(
+        `AWS_DEFAULT_REGION=${config.region} AWS_ACCESS_KEY_ID=${config.accessKeyId} AWS_SECRET_ACCESS_KEY=${config.secretAccessKey} ${this.custodian} run --output-dir=.  temp.yaml`,
+      );
+    } catch (e) {
+      throw new Error(e.message);
+    }
+
+    const resourcesPath = `./${policyName}/resources.json`;
+    if (!fs.existsSync(resourcesPath)) {
+      throw new Error(`./${policyName}/resources.json file does not exist.`);
+    }
+    const data = JSON.parse(fs.readFileSync(resourcesPath, 'utf8'));
+
     // remove temp files and folders
     this.removeTempFoldersAndFiles(policyName);
 
-    // check validate response
+    return data;
+  }
 
+  private removeTempFoldersAndFiles(policyName: string) {
+    if (!fs.existsSync(`./${policyName}`)) {
+      execSync(`rm -r ./${policyName}`);
+    }
+    if (!fs.existsSync(`./temp.yaml`)) {
+      execSync(`rm ./temp.yaml`);
+    }
+  }
+
+  private generateDetachedVolumesResponse(responseJson: any): DetachedVolumesResponse {
     return new DetachedVolumesResponse(
       responseJson.map(
         (ebsResponseItemJson: { VolumeId: string; Size: number; AvailabilityZone: string; CreateTime: string }) => {
@@ -98,31 +112,5 @@ export class ShellAdapter implements AdapterInterface {
         },
       ),
     );
-  }
-
-  removeTempFoldersAndFiles(policyName: string) {
-    if (!fs.existsSync(`./${policyName}`)) {
-      exec(`rm -r ./${policyName}`);
-    }
-    if (!fs.existsSync(`./temp.yaml`)) {
-      exec(`rm ./temp.yaml`);
-    }
-  }
-
-  executeCustodianCommand(config: Configuration, policy: any, policyName: string) {
-    fs.writeFileSync('./temp.yaml', yaml.dump(policy), 'utf8');
-    exec(
-      `AWS_DEFAULT_REGION=${config.region} AWS_ACCESS_KEY_ID=${config.accessKeyId} AWS_SECRET_ACCESS_KEY=${config.secretAccessKey} ${this.custodian} run --output-dir=.  temp.yaml`,
-      (error, stdout: any, stderr: any) => {
-        if (error) {
-          throw new Error(error.message);
-        }
-      },
-    );
-    const resourcesPath = `./${policyName}/resources.json`;
-    if (!fs.existsSync(resourcesPath)) {
-      throw new Error(`./${policyName}/resources.json file does not exist.`);
-    }
-    return JSON.parse(fs.readFileSync(resourcesPath, 'utf8'));
   }
 }
