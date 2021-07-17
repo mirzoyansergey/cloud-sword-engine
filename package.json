@@ -1,6 +1,6 @@
 {
   "name": "cloud-sword-engine",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Cloud sword engine",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
