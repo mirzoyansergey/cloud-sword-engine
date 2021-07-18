@@ -1,5 +1,5 @@
 // Elastic Block Store
-export default class Ebs {
+export class Ebs {
   readonly id: string;
   readonly size: number;
   readonly availabilityZone: string;

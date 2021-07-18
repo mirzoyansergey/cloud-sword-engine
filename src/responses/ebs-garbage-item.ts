@@ -1,8 +1,8 @@
 import { GarbageItemInterface } from './garbage-item-interface';
-import Ebs from '../domain/types/ebs';
 import { ResourceType } from '../domain/resource-type';
+import { Ebs } from '../domain/types/ebs';
 
-export default class EbsGarbageItem implements GarbageItemInterface {
+export class EbsGarbageItem implements GarbageItemInterface {
   readonly name: string;
   readonly type: ResourceType = ResourceType.EBS;
   readonly size: number;

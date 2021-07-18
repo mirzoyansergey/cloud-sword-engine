@@ -1,15 +1,15 @@
 import { AdapterInterface } from './adapter-interface';
 import { Configuration } from '../configuration';
-import FindGarbageResponse from '../responses/find-garbage-response';
-import FindGarbageDetailsResponse from '../responses/find-garbage-details-response';
 import { GarbageItemInterface } from '../responses/garbage-item-interface';
-import Ebs from '../domain/types/ebs';
-import EbsGarbageItem from '../responses/ebs-garbage-item';
-import DetachedVolumesResponse from '../responses/detached-volumes-response';
 import { execSync } from 'child_process';
 import yaml from 'js-yaml';
 import * as fs from 'fs';
 import * as policies from '../policy.json';
+import { FindGarbageResponse } from '../responses/find-garbage-response';
+import { FindGarbageDetailsResponse } from '../responses/find-garbage-details-response';
+import { Ebs } from '../domain/types/ebs';
+import { EbsGarbageItem } from '../responses/ebs-garbage-item';
+import { DetachedVolumesResponse } from '../responses/detached-volumes-response';
 
 export class ShellAdapter implements AdapterInterface {
   private readonly custodian: string;

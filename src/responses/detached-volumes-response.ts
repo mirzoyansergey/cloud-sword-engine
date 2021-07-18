@@ -1,6 +1,6 @@
-import Ebs from '../domain/types/ebs';
+import { Ebs } from '../domain/types/ebs';
 
-export default class DetachedVolumesResponse {
+export class DetachedVolumesResponse {
   readonly items: Ebs[];
   readonly count: number;
 

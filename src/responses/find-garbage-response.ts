@@ -1,4 +1,4 @@
-export default class FindGarbageResponse {
+export class FindGarbageResponse {
   readonly count: number;
 
   constructor(count: number) {
