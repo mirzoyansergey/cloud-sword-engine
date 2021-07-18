@@ -13,7 +13,7 @@ Using npm:
 $ npm i -g npm
 $ npm i cloud-sword-engine
 ```
-Note: add `--save-dev` if you are using npm < 5.0.0
+Note: add `--save` if you are using npm < 5.0.0
 ## Usage
 ```shell
 import {AdapterInterface, ShellAdapter, Configuration, AdapterInterface, FindGarbageResponse} from "cloud-sword-engine";
