@@ -5,7 +5,7 @@
     "declaration": true,
     "outDir": "./lib",
     "strict": true,
-    "importHelpers": true,
+    "importHelpers": false,
     "rootDir": "src",
     "resolveJsonModule": true,
     "esModuleInterop": true
