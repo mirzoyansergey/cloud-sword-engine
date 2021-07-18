@@ -53,9 +53,9 @@ export class ShellAdapter implements AdapterInterface {
     if (volumes.length) {
       policy.policies[0].filters = [
         {
-          type: "value",
-          key: "VolumeId",
-          op: "in",
+          type: 'value',
+          key: 'VolumeId',
+          op: 'in',
           value: volumes,
         },
       ];
@@ -73,7 +73,7 @@ export class ShellAdapter implements AdapterInterface {
     try {
       execSync(
         `AWS_DEFAULT_REGION=${config.region} AWS_ACCESS_KEY_ID=${config.accessKeyId} AWS_SECRET_ACCESS_KEY=${config.secretAccessKey} ${this.custodian} run --output-dir=.  temp.yaml`,
-        {stdio : 'pipe'}
+        { stdio: 'pipe' },
       );
     } catch (e) {
       throw new Error(e.message);
