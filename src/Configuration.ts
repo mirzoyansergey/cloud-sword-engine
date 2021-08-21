@@ -3,6 +3,8 @@ export class Configuration {
   readonly secretAccessKey: string;
   region: string = 'us-west-1';
 
+  // ....list all options
+
   constructor(accessKeyId: string, secretAccessKey: string, region?: string) {
     this.accessKeyId = accessKeyId;
     this.secretAccessKey = secretAccessKey;

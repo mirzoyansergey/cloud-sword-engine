@@ -1,6 +1,6 @@
-export * from './configuration';
-export * from './adapters/shell-adapter';
-export * from './adapters/adapter-interface';
+export * from './Configuration';
+export * from './adapters/AWSShellEngineAdapter';
+export * from './adapters/EngineInterface';
 
 export * from './domain/resource-type';
 export * from './domain/types/ebs';
